@@ -19,7 +19,6 @@ class CreateProductService {
   ) {}
 
   public async execute({ name, price, quantity }: IRequest): Promise<Product> {
-    // TODO
     const findProduct = await this.productsRepository.findByName(name);
 
     if (findProduct) throw new AppError('This product name are in use');

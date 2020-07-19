@@ -40,12 +40,26 @@ class CreateOrderService {
     const productsIds = products.map(product => {
       return { id: product.id };
     });
+
     const productsFinded = await this.productsRepository.findAllById(
       productsIds,
     );
 
     if (productsFinded.length === 0)
       throw new AppError('Products ids not found');
+
+    const quantityNotAvailable = products.filter(product => {
+      return productsFinded.find(
+        productFinded =>
+          productFinded.id === product.id &&
+          productFinded.quantity < product.quantity,
+      );
+    });
+
+    if (quantityNotAvailable.length > 0)
+      throw new AppError(
+        'The order has products with not available quantities.',
+      );
 
     const productsToAddInOrder = products.map(product => {
       const productFinded = productsFinded.find(
