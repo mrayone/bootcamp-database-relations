@@ -20,7 +20,9 @@ class Order {
   @JoinColumn({ name: 'customer_id', referencedColumnName: 'id' })
   customer: Customer;
 
-  @OneToMany(_ => OrdersProducts, orderProducts => orderProducts.order)
+  @OneToMany(_ => OrdersProducts, orderProducts => orderProducts.order, {
+    cascade: ['insert', 'update', 'remove'],
+  })
   order_products: OrdersProducts[];
 
   @CreateDateColumn()
